@@ -1,0 +1,13 @@
+.error {
+    color: red;
+    font-size: 12px;
+  }
+  
+  button[disabled] {
+    background-color: gray;
+  }
+  
+  input.ng-invalid.ng-touched {
+    border-color: red;
+  }
+  

@@ -1,5 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
-import { addTask, completeTask, deleteTask } from './tasks.actions';
+import { addTask, deleteTask, completeTask } from './tasks.actions';
 
 export interface Task {
   id: number;
@@ -12,23 +12,25 @@ export interface TasksState {
 }
 
 export const initialState: TasksState = {
-  tasks: []
+  tasks: [],
 };
+
+let taskId = 1;
 
 export const tasksReducer = createReducer(
   initialState,
   on(addTask, (state, { task }) => ({
     ...state,
-    tasks: [...state.tasks, { id: Date.now(), task, completed: false }]
+    tasks: [...state.tasks, { id: taskId++, task, completed: false }]
   })),
-  on(completeTask, (state, { taskId }) => ({
+  on(deleteTask, (state, { id }) => ({
+    ...state,
+    tasks: state.tasks.filter(task => task.id !== id)
+  })),
+  on(completeTask, (state, { id }) => ({
     ...state,
     tasks: state.tasks.map(task =>
-      task.id === taskId ? { ...task, completed: true } : task
+      task.id === id ? { ...task, completed: true } : task
     )
-  })),
-  on(deleteTask, (state, { taskId }) => ({
-    ...state,
-    tasks: state.tasks.filter(task => task.id !== taskId)
   }))
 );

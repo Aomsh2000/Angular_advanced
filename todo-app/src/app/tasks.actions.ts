@@ -8,10 +8,10 @@ export const addTask = createAction(
 
 export const deleteTask = createAction(
   '[Task List] Delete Task',
-  props<{ taskId: number }>()
+  props<{ id: number }>()
 );
 
 export const completeTask = createAction(
   '[Task List] Complete Task',
-  props<{ taskId: number }>()
+  props<{ id: number }>()
 );

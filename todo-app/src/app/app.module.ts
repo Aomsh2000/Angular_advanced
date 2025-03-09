@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+/* import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { ReactiveFormsModule } from '@angular/forms';  // Ensure ReactiveFormsModule is imported
 import { StoreModule } from '@ngrx/store';
@@ -22,3 +22,4 @@ import { AppComponent } from './app.component';  // Import AppComponent here
   bootstrap: [AppComponent]  // Bootstrap AppComponent
 })
 export class AppModule { }
+ */

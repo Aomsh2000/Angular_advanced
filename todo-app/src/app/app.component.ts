@@ -1,34 +1,49 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators,ReactiveFormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Store } from '@ngrx/store';
+import { addTask, completeTask, deleteTask } from './tasks.actions'; // Make sure you have these actions defined
+import { selectCompletedTasks, selectPendingTasks } from './tasks.selectors'; // Make sure you have these selectors defined
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'],
-  imports: [ReactiveFormsModule,CommonModule]
+  styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  todoForm: FormGroup;  // Declare the form group
+  todoForm: FormGroup;
+  pendingTasks$ ;
+  completedTasks$ ;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private store: Store) {
     // Create the form with validation
     this.todoForm = this.fb.group({
-      task: ['', [Validators.required, Validators.minLength(3)]] // Validators for required and min length
+      task: ['', [Validators.required, Validators.minLength(3)]]
     });
+    // Initialize observables for pending and completed tasks after the constructor
+    this.pendingTasks$ = this.store.select(selectPendingTasks);
+    this.completedTasks$ = this.store.select(selectCompletedTasks);
   }
 
-  // Submit handler
+  // Submit handler to add a task
   onSubmit() {
     if (this.todoForm.valid) {
-      // For now, log the value of the form
-      console.log(this.todoForm.value);
-
-      // Reset the form after submission
-      this.todoForm.reset();
+      const task = this.todoForm.value.task;
+      this.store.dispatch(addTask({ task }));
+      this.todoForm.reset();  // Reset form after submitting
     }
   }
 
-  // Get the task control to show validation error messages
+  // Function to mark task as completed
+  onCompleteTask(taskId: number) {
+    this.store.dispatch(completeTask({ taskId }));
+  }
+
+  // Function to delete task
+  onDeleteTask(taskId: number) {
+    this.store.dispatch(deleteTask({ taskId }));
+  }
+
+  // Get task control for validation checks
   get task() {
     return this.todoForm.get('task');
   }

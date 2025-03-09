@@ -1,14 +1,33 @@
 <div class="todo-container">
   <h1>To-Do List</h1>
+
+  <!-- Task input form -->
   <form [formGroup]="todoForm" (ngSubmit)="onSubmit()">
     <label for="task">Task:</label>
-    <input type="text" id="task" formControlName="task" placeholder="Enter your task" />
-    
-    <div *ngIf="task?.invalid && (task?.dirty || task?.touched)" class="error">
-      <div *ngIf="task?.errors?.['required']">Task is required.</div>
-      <div *ngIf="task?.errors?.['minlength']">Task must be at least 3 characters long.</div>
+    <input type="text" id="task" formControlName="task" placeholder="Enter your task">
+    <div *ngIf="task?.invalid && task?.touched" class="error">
+      Task is required and must be at least 3 characters.
     </div>
-    
     <button type="submit" [disabled]="todoForm.invalid">Add Task</button>
   </form>
+
+  <!-- Display pending tasks -->
+  <h2>Pending Tasks</h2>
+  <ul>
+    <li *ngFor="let task of pendingTasks$ | async">
+      <input type="checkbox" (change)="onCompleteTask(task.id)" [checked]="task.completed">
+      {{ task.task }}
+      <button (click)="onDeleteTask(task.id)">Delete</button>
+    </li>
+  </ul>
+
+  <!-- Display completed tasks -->
+  <h2>Completed Tasks</h2>
+  <ul>
+    <li *ngFor="let task of completedTasks$ | async">
+      <input type="checkbox" (change)="onCompleteTask(task.id)" [checked]="task.completed" disabled>
+      <del>{{ task.task }}</del>
+      <button (click)="onDeleteTask(task.id)">Delete</button>
+    </li>
+  </ul>
 </div>
